@@ -1,8 +1,9 @@
 from django.db import models
 from apps.category.models import Category
+from apps.utils.models import Timestamp
 
 # Create your models here.
-class Product(models.Model):
+class Product(Timestamp):
     nama = models.CharField(max_length=100)
     harga = models.CharField(max_length=100)
     image = models.ImageField()

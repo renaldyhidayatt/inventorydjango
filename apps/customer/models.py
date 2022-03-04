@@ -1,7 +1,8 @@
 from django.db import models
+from apps.utils.models import Timestamp
 
 # Create your models here.
-class Customer(models.Model):
+class Customer(Timestamp):
     name = models.CharField(max_length=100)
     alamat = models.CharField(max_length=100)
     email = models.CharField(max_length=100)

@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+
+from apps.utils.models import Timestamp
 from .manager import UserManager
 
 # Create your models here.
-class Users(AbstractBaseUser):
+class Users(AbstractBaseUser, Timestamp):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=200, unique=True)
