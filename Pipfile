@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 django = "*"
 pillow = "*"
+xhtml2pdf = "*"
+pandas = "*"
 
 [dev-packages]
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Masuk Export</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+      #categories {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      #categories td,
+      #categories th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+
+      #categories tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      #categories tr:hover {
+        background-color: #ddd;
+      }
+
+      #categories th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #4caf50;
+        color: white;
+      }
+    </style>
+  </head>
+
+  <body>
+      <table id="categories" width="100%">
+
+      </table>
+  </body>
+</html>
