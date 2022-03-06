@@ -15,9 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
-    path("auth/", include("apps.users.urls")),
-    path("category/", include("apps.category.urls")),
     path("admin/", admin.site.urls),
-]
+    path("auth/", include("apps.users.authurls")),
+    path("category/", include("apps.category.urls")),
+    path("customer/", include("apps.customer.urls")),
+    path("product/", include("apps.product.urls")),
+    path("sale/", include("apps.sale.urls")),
+    path("supplier/", include("apps.supplier.urls")),
+    path("", include("apps.dashboard.urls")),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = "apps.handler.page404.page_not_found_view"

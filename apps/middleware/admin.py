@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.shortcuts import redirect
 
 
 class AdminMiddleware:
@@ -7,5 +8,5 @@ class AdminMiddleware:
 
     def __call__(self, request):
         if request.path.startswith("/admin") and not request.user.is_superuser:
-            raise Http404()
+            raise redirect("home")
         return self.get_response(request)

@@ -47,7 +47,6 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
-    "apps.middleware.admin.AdminMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -55,6 +54,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # "apps.middleware.admin.AdminMiddleware",
 ]
 
 ROOT_URLCONF = "djangoinvent.urls"
@@ -126,6 +126,9 @@ USE_TZ = True
 STATIC_URL = "static/"
 AUTH_USER_MODEL = "users_app.Users"
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "public/static"),)
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "public/media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

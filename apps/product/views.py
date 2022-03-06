@@ -1,54 +1,67 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Product
 from apps.category.models import Category
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
+@login_required(login_url="/auth/login")
 def productList(request):
     product = Product.objects.all()
 
-    context = {
-        "product": product
-    }
+    context = {"product": product}
 
-    return render(request, 'product/index.html', context)
+    return render(request, "product/index.html", context)
 
 
+@login_required(login_url="/auth/login")
 def productCreate(request):
+    category = Category.objects.all()
+    context = {"category": category}
     if request.method == "POST":
-        name = request.POST['POST']
-        harga = request.POST['harga']
-        image = request.FILES['image']
-        qty = request.POST['qty']
-        category = request.POST['category']
+        name = request.POST["name"]
+        harga = request.POST["harga"]
+        image = request.FILES.get("image")
+        qty = request.POST.get("qty")
+        category = request.POST["category"]
 
-        category_id = Category.objects.get(nama=category)
+        category_id = Category.objects.get(name=category)
 
-        Product.objects.create(name=name,harga=harga,image=image,qty=qty,category=category)
+        Product.objects.create(
+            name=name, harga=harga, image=image, qty=qty, category=category_id
+        )
 
-        return redirect('product')
+        return redirect("product")
     else:
-        return render(request,'product/create.html')
+        return render(request, "product/create.html", context)
 
+
+@login_required(login_url="/auth/login")
 def productUpdate(request, id):
     product = Product.objects.get(id=id)
+    category = Category.objects.all()
+    context = {"product": product, "category": category}
     if request.method == "POST":
-        name = request.POST['POST']
-        harga = request.POST['harga']
-        image = request.FILES['image']
-        qty = request.POST['qty']
-        category = request.POST['category']
+        name = request.POST["name"]
+        harga = request.POST["harga"]
+        image = request.FILES["image"]
+        qty = request.POST.get("qty")
+        category = request.POST["category"]
+
+        category_id = Category.objects.get(name=category)
 
         product.name = name
         product.harga = harga
         product.image = image
         product.qty = qty
-        product.category = category
+        product.category = category_id
 
-        return redirect('product')
+        return redirect("product")
     else:
-        return render(request, 'product/update.html')
+        return render(request, "product/update.html", context)
 
 
+@login_required(login_url="/auth/login")
 def productDelete(request, id):
     product = Product.objects.get(id=id)
 
@@ -56,4 +69,4 @@ def productDelete(request, id):
         product.delete()
         return redirect()
     except Product.DoesNotExist():
-        raise Exception("Tolol")
+        raise Exception("Doesn't  error model Product")
