@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "apps.sale",
     "apps.supplier",
     "apps.users",
+    "apps.productmasuk",
+    "apps.productkeluar",
 ]
 
 
@@ -54,7 +56,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # "apps.middleware.admin.AdminMiddleware",
+    "apps.middleware.admin.AdminMiddleware",
 ]
 
 ROOT_URLCONF = "djangoinvent.urls"

@@ -88,6 +88,36 @@
             </div>
         </div>
     </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#productmasuk"
+            aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Product Masuk</span>
+        </a>
+        <div id="productmasuk" class="collapse" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Product Masuk</h6>
+                <a class="collapse-item" href="{% url 'productmasuk' %}">List</a>
+                <a class="collapse-item" href="{% url 'productmasukcreate' %}">Create</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#productkeluar"
+            aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Product Keluar</span>
+        </a>
+        <div id="productkeluar" class="collapse" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Product Keluar</h6>
+                <a class="collapse-item" href="{% url 'productkeluar' %}">List</a>
+                <a class="collapse-item" href="{% url 'productkeluarcreate' %}">Create</a>
+            </div>
+        </div>
+    </li>
     
 
     <!-- Divider -->
