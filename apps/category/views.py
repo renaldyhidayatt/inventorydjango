@@ -1,6 +1,11 @@
+from asyncore import write
 from django.shortcuts import render, redirect
 from .models import Category
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+import pandas as pd
+import csv
+
 
 # Create your views here.
 
@@ -52,3 +57,23 @@ def deleteCategory(request, id):
         return redirect("category")
     except Category.DoesNotExist:
         raise Exception("Category id not found")
+
+
+@login_required(login_url="/auth/login")
+def exportcategoryCsv(request):
+    if request.method == "POST":
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="CustomerData.csv"'
+        writer = csv.writer(response)
+        writer.writerow(["Category Csv"])
+
+        writer.writerow(["id", "name"])
+
+        category = Category.objects.all().values_list("id", "name")
+
+        for c in category:
+            writer.writerow(c)
+
+        return response
+
+    return render(request, "category/export.html")

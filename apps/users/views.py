@@ -12,7 +12,7 @@ def login(request):
 
         auth.login(request, user)
 
-        return redirect("home")
+        return redirect("dashboard")
     else:
         return render(request, "auth/login.html")
 
