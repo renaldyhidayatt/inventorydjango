@@ -6,7 +6,7 @@ from apps.utils.models import Timestamp
 class Product(Timestamp):
     name = models.CharField(max_length=100)
     harga = models.CharField(max_length=100)
-    image = models.ImageField(upload_to="products/image")
+    image = models.ImageField(upload_to="products/image", default="image/default.png")
     qty = models.CharField(max_length=100, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 

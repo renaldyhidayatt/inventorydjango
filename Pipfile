@@ -8,6 +8,7 @@ django = "*"
 pillow = "*"
 xhtml2pdf = "*"
 pandas = "*"
+numpy = "*"
 
 [dev-packages]
 black = "*"
