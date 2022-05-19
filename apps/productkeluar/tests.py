@@ -34,3 +34,9 @@ class ProductKeluarTestCase(TestCase):
 
     def test_product_keluar_customer(self):
         self.assertEqual(self.product_keluar.customer, self.customer)
+
+    def test_product_keluar_Product(self):
+        self.assertEqual(self.product_keluar.product, self.product)
+
+    def test_product_keluar_Customer(self):
+        self.assertEqual(self.product_keluar.customer, self.customer)

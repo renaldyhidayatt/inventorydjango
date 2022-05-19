@@ -33,3 +33,9 @@ class ProductMasukTestCase(TestCase):
 
     def test_product_masuk_supplier(self):
         self.assertEqual(self.product_masuk.supplier, self.supplier)
+
+    def test_product_masuk_Product(self):
+        self.assertEqual(self.product_masuk.product, self.product)
+
+    def test_product_masuk_Supplier(self):
+        self.assertEqual(self.product_masuk.supplier, self.supplier)
