@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.9.6-alpine
+FROM python:3.9.13-alpine3.16
 
 # set work directory
 WORKDIR /usr/src/app
@@ -15,7 +15,7 @@ RUN apk update \
 # install dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
-RUN pip install -r dev.txt
+RUN pip install -r requirements.txt
 
 COPY ./scripts/entrypoint.sh .
 RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh
