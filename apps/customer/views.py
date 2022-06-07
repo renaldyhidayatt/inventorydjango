@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Customer
 from django.contrib.auth.decorators import login_required
-from apps.utils.processpdf import html_pdf
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 

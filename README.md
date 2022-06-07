@@ -4,6 +4,6 @@
 
 - git clone https://github.com/renaldyhidayatt/inventorydjango
 - pipenv install
-- running `sh python manage.py runserver`
+- running `docker-compose up --build -d`
 
 ### Demo

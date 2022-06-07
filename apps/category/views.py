@@ -1,9 +1,7 @@
-from asyncore import write
 from django.shortcuts import render, redirect
 from .models import Category
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-import pandas as pd
 import csv
 
 

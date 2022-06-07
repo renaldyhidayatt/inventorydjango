@@ -2,7 +2,7 @@
 FROM python:3.9.13-alpine3.16
 
 # set work directory
-WORKDIR /usr/src/app
+WORKDIR /usr/app/src
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -23,4 +23,4 @@ RUN chmod +x /usr/src/app/entrypoint.sh
 
 # copy project
 COPY . ./
-CMD ["/usr/src/app/entrypoint.dev.sh"]
+CMD ["/usr/app/src/entrypoint.dev.sh"]
