@@ -1,43 +1,39 @@
-{% extends 'layouts/base.html' %} 
+{% extends 'layouts/base.html' %}
 {% block content %}
-<h1 class="h3 mb-2 text-gray-800">Table Category</h1>
-<p class="mb-4">
-  DataTables is a third party plugin that is used to generate the demo table
-  below. For more information about DataTables, please visit the
-  <a target="_blank" href="https://datatables.net"
-    >official DataTables documentation</a
-  >.
-</p>
 
-<!-- DataTales Example -->
+
 <div class="card shadow mb-4">
-  <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+  <div class="card-header d-flex align-items-center justify-content-between py-3">
+    <h6 class="m-0 font-weight-bold text-primary">List Category</h6>
+    <a href="{% url 'exportcategory' %}" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" href="#"><i
+        class="fas fa-plus-print fa-sm"></i>Export Csv</a>
+
   </div>
   <div class="card-body">
+    {% include 'layouts/messages.html' %}
     <div class="table-responsive">
-        <table id="example" class="table table-striped table-bordered" style="width:100%">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Edit & Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for category in categories %}
-                <tr>
-                    <td>{{ category.id }}</td>
-                    <td>{{ category.name }}</td>
-                    <td>
-                        <a href="{% url 'updatecategory' category.id %}" class="btn btn-primary btn-sm">Edit</button>
-                        <a href="{% url 'deletecategory' category.id %}" class="btn btn-danger btn-sm">Delete</button>
-                    </td>
-                </tr>
-                {% endfor %}
-        
-            </tbody>
-        </table>
+      <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Edit & Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for category in categories %}
+          <tr>
+            <td>{{ category.id }}</td>
+            <td>{{ category.name }}</td>
+            <td>
+              <a href="{% url 'updatecategory' category.id %}" class="btn btn-primary btn-sm">Edit</button>
+                <a href="{% url 'deletecategory' category.id %}" class="btn btn-danger btn-sm">Delete</button>
+            </td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -46,8 +42,8 @@
 
 {% block javascript %}
 <script type="text/javascript">
-$(document).ready(function() {
+  $(document).ready(function () {
     $('#example').DataTable();
-});
+  });
 </script>
 {% endblock %}

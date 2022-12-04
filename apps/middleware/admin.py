@@ -8,5 +8,5 @@ class AdminMiddleware:
 
     def __call__(self, request):
         if request.path.startswith("/admin") and not request.user.is_superuser:
-            raise redirect("home")
+            raise redirect("dashboard")
         return self.get_response(request)

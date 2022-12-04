@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Sale
+from apps.product.models import Product
+from apps.customer.models import Customer
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 
@@ -15,36 +18,86 @@ def saleList(request):
 
 @login_required(login_url="/auth/login")
 def saleCreate(request):
+    product = Product.objects.all()
+    customer = Customer.objects.all()
+
+    context = {"product": product, "customer": customer}
     if request.method == "POST":
-        name = request.POST["name"]
-        alamat = request.POST["alamat"]
-        email = request.POST["email"]
-        telepon = request.POST["telepon"]
+        product_id = request.POST["product"]
+        customer_id = request.POST["customer"]
+        qty = request.POST["qty"]
+        date_transaksi = request.POST["date_transaksi"]
 
-        Sale.objects.create(name=name, alamat=alamat, email=email, telepon=telepon)
+        product = Product.objects.get(id=product_id)
+        customer = Customer.objects.get(id=customer_id)
 
+        if not product:
+            messages.error(request, "required product ")
+            return redirect("sale")
+
+        if not customer:
+            messages.error(request, "required customer")
+            return redirect("sale")
+
+        quantityproduct = int(product.qty) - int(qty)
+        product.qty = quantityproduct
+
+        harga = int(qty) * int(product.harga)
+
+        product.save()
+
+        Sale.objects.create(
+            customer=customer,
+            product=product,
+            qty=int(qty),
+            total_price=harga,
+            date_transaksi=date_transaksi,
+        )
+        messages.success(request, "Berhasil membuat sale")
         return redirect("sale")
 
     else:
-        return render(request, "sale/create.html")
+        return render(request, "sale/create.html", context=context)
 
 
 @login_required(login_url="/auth/login")
 def saleUpdate(request, id):
     sale = Sale.objects.get(id=id)
-    context = {"sale": sale}
+    product = Product.objects.all()
+    customer = Customer.objects.all()
+    context = {"sale": sale, "product": product, "customer": customer}
     if request.method == "POST":
-        name = request.POST["name"]
-        alamat = request.POST["alamat"]
-        email = request.POST["email"]
-        telepon = request.POST["telepon"]
+        product_id = request.POST["product"]
+        customer_id = request.POST["customer"]
+        qty = request.POST["qty"]
+        date_transaksi = request.POST["date_transaksi"]
 
-        sale.name = name
-        sale.alamat = alamat
-        sale.email = email
-        sale.telepon = telepon
+        product = Product.objects.get(id=product_id)
+        customer = Customer.objects.get(id=customer_id)
+
+        if not product:
+            messages.error(request, "undefined id product ")
+            return redirect("sale")
+
+        if not customer:
+            messages.error(request, "undefined id customer")
+            return redirect("sale")
+
+        quantityproduct = int(product.qty) - int(qty)
+        product.qty = quantityproduct
+
+        harga = int(qty) * int(product.harga)
+
+        product.save()
+
+        sale.customer = customer
+        sale.product = product
+        sale.qty = qty
+        sale.date_transaksi = date_transaksi
+        sale.total_price = harga
 
         sale.save()
+        messages.success(request, "berhasil update sale")
 
         return redirect("sale")
 
@@ -58,6 +111,7 @@ def saleDelete(request, id):
 
     try:
         sale.delete()
+        messages.success(request, "berhasil mendelete sale")
 
         return redirect("sale")
     except Sale.DoesNotExist:

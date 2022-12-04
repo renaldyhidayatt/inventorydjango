@@ -12,37 +12,56 @@
     <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
   </div>
   <div class="card-body">
-    <form action="{% url 'productupdate' product.id %}" method="post" enctype="multipart/form-data">
+    <form
+      action="{% url 'productupdate' product.id %}"
+      method="post"
+      enctype="multipart/form-data"
+    >
       {% csrf_token %}
-      <div class="form-group" >
+      <div class="form-group">
         <label for="Name">Name</label>
-        <input class="form-control form-control-sm mb-2 mr-sm-2" value="{{product.name}}" name="name" />
+        <input
+          class="form-control form-control-sm mb-2 mr-sm-2"
+          value="{{product.name}}"
+          name="name"
+        />
       </div>
       <div class="form-group">
         <label for="Harga">Harga</label>
-        <input type="text" class="form-control form-control-sm mb-2 mr-sm-2" value="{{product.harga}}" name="harga" />
+        <input
+          type="text"
+          class="form-control form-control-sm mb-2 mr-sm-2"
+          value="{{product.harga}}"
+          name="harga"
+        />
       </div>
-      <div class="form-group">
-        <label for="Email">Email</label>
-        <input type="email" class="form-control form-control-sm mb-2 mr-sm-2" name="email" value="{{product.email}}" />
-      </div>
-      <div class="form-group">
-        <label for="Image">Image</label>
-        <input type="file" class="form-control form-control-sm mb-2 mr-sm-2" name="image" />
-      </div>
+
       <div class="form-group">
         <label for="Quantity">Quantity</label>
-        <input type="text" class="form-control form-control-sm mb-2 mr-sm-2" value="{{product.qty}}" name="qty" />
+        <input
+          type="text"
+          class="form-control form-control-sm mb-2 mr-sm-2"
+          value="{{product.qty}}"
+          name="qty"
+        />
       </div>
       <div class="form-group">
         <label for="Category">Category</label>
         <select name="category" class="form-control">
-            <option value="===">Kosong</option>
-            {% for c in category %}
-            <option value="{{c.name}}">{{c.name}}</option>
-            {% endfor %}
+          <option value="===">Kosong</option>
+          {% for c in category %}
+          <option value="{{c.id}}">{{c.name}}</option>
+          {% endfor %}
         </select>
-
+      </div>
+      <div class="form-group">
+        <label for="Supplier">Supplier</label>
+        <select name="supplier" class="form-control">
+          <option value="===">Kosong</option>
+          {% for s in supplier %}
+          <option value="{{s.id}}">{{s.name}}</option>
+          {% endfor %}
+        </select>
       </div>
       <button class="btn btn-primary btn-md">Submit</button>
     </form>

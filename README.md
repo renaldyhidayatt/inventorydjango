@@ -1,4 +1,6 @@
-### Inventory With Django
+### Inventory Django
+
+Tugas Kuliah Rpl
 
 ### How to use my project
 
@@ -7,3 +9,9 @@
 - running `docker-compose up --build -d`
 
 ### Demo
+
+<img src="images/Demo.png" />
+
+### Design Database
+
+<img src="images/kelompok.png" />

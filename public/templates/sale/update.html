@@ -1,5 +1,4 @@
-{% extends 'layouts/base.html' %} 
-{% block content %}
+{% extends 'layouts/base.html' %} {% block content %}
 <h1 class="h3 mb-2 text-gray-800">Table Category</h1>
 <p class="mb-4">
   DataTables is a third party plugin that is used to generate the demo table
@@ -13,23 +12,49 @@
     <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
   </div>
   <div class="card-body">
-    <form action="{% url 'saleupdate' sale.id %}" method="post" enctype="multipart/form-data">
+    <form
+      action="{% url 'saleupdate' sale.id %}"
+      method="post"
+      enctype="multipart/form-data"
+    >
       {% csrf_token %}
-      <div class="form-group" >
-        <label for="Name">Name</label>
-        <input class="form-control form-control-sm mb-2 mr-sm-2" name="name" value="{{sale.name}}" />
+      <div class="form-group">
+        <label for="Customer">Customer</label>
+        <select name="customer" class="form-control">
+          <option value="===">Kosong</option>
+          {% for c in customer %}
+          <option value="{{c.id}}">{{c.name}}</option>
+          {% endfor %}
+        </select>
       </div>
-      <div class="form-group" >
-        <label for="Alamat">Alamat</label>
-        <input class="form-control form-control-sm mb-2 mr-sm-2" name="alamat" value="{{sale.alamat}}" />
+      <div class="form-group">
+        <label for="Product">Product</label>
+        <select name="product" class="form-control">
+          <option value="===">Kosong</option>
+          {% for c in product %}
+          <option value="{{c.id}}">{{c.name}}</option>
+          {% endfor %}
+        </select>
       </div>
-      <div class="form-group" >
-        <label for="Email">Email</label>
-        <input class="form-control form-control-sm mb-2 mr-sm-2" name="email" value="{{sale.email}}" />
+      <div class="form-group">
+        <label for="Qty">Quantity</label>
+        <input
+          type="number"
+          id="Qty"
+          value="{{sale.qty}}"
+          class="form-control form-control-sm mb-2 mr-sm-2"
+          name="qty"
+        />
       </div>
-      <div class="form-group" >
-        <label for="Telepon">Telepon</label>
-        <input class="form-control form-control-sm mb-2 mr-sm-2" name="telepon" value="{{sale.telepon}}" />
+      <div class="form-group">
+        <label for="date_transaksi">Tanggal Transaksi</label>
+        <input
+          type="date"
+          class="form-control form-control-sm mb-2 mr-sm-2"
+          name="date_transaksi"
+          value="{{sale.date_transaksi}}"
+          id="date_transaksi"
+        />
       </div>
       <button class="btn btn-primary btn-md">Submit</button>
     </form>

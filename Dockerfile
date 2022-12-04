@@ -23,4 +23,4 @@ RUN chmod +x /usr/src/app/entrypoint.sh
 
 # copy project
 COPY . ./
-CMD ["/usr/app/src/entrypoint.dev.sh"]
+CMD ["/usr/app/src/entrypoint.sh"]

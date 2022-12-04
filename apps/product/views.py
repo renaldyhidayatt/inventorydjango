@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from .models import Product
 from apps.category.models import Category
+from apps.supplier.models import Supplier
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 # Create your views here.
@@ -17,19 +19,36 @@ def productList(request):
 @login_required(login_url="/auth/login")
 def productCreate(request):
     category = Category.objects.all()
-    context = {"category": category}
+    supplier = Supplier.objects.all()
+    context = {"category": category, "supplier": supplier}
     if request.method == "POST":
         name = request.POST["name"]
         harga = request.POST["harga"]
         image = request.FILES.get("image")
         qty = request.POST.get("qty")
         category = request.POST["category"]
+        supplier = request.POST["supplier"]
 
-        category_id = Category.objects.get(name=category)
+        category_id = Category.objects.get(id=category)
+        supplier_id = Supplier.objects.get(id=supplier)
+
+        if not category_id:
+            messages.info(request, "required category id")
+            return redirect("product")
+
+        if not supplier_id:
+            messages.info(request, "required supplier id")
+            return redirect("product")
 
         Product.objects.create(
-            name=name, harga=harga, image=image, qty=qty, category=category_id
+            name=name,
+            harga=harga,
+            image=image,
+            qty=int(qty),
+            category=category_id,
+            supplier=supplier_id,
         )
+        messages.success(request, "berhasil membuat product")
 
         return redirect("product")
     else:
@@ -40,21 +59,34 @@ def productCreate(request):
 def productUpdate(request, id):
     product = Product.objects.get(id=id)
     category = Category.objects.all()
-    context = {"product": product, "category": category}
+    supplier = Supplier.objects.all()
+    context = {"product": product, "category": category, "supplier": supplier}
     if request.method == "POST":
         name = request.POST["name"]
         harga = request.POST["harga"]
-        image = request.FILES["image"]
         qty = request.POST.get("qty")
         category = request.POST["category"]
+        supplier = request.POST["supplier"]
 
-        category_id = Category.objects.get(name=category)
+        category_id = Category.objects.get(id=category)
+        supplier_id = Supplier.objects.get(id=supplier)
+
+        if not category_id:
+            messages.info(request, "required category id")
+            return redirect("product")
+
+        if not supplier_id:
+            messages.info(request, "required supplier id")
+            return redirect("product")
 
         product.name = name
         product.harga = harga
-        product.image = image
-        product.qty = qty
+        product.qty = int(qty)
         product.category = category_id
+
+        product.save()
+
+        messages.success(request, "berhasil update product")
 
         return redirect("product")
     else:
@@ -67,6 +99,8 @@ def productDelete(request, id):
 
     try:
         product.delete()
+        messages.success(request, "berhasil delete product")
         return redirect()
     except Product.DoesNotExist():
-        raise Exception("Doesn't  error model Product")
+        messages.error(request, "Error pada product id")
+        return redirect("product")

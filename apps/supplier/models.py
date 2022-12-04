@@ -8,6 +8,7 @@ class Supplier(Timestamp):
     alamat = models.CharField(max_length=35)
     email = models.EmailField(unique=True)
     telepon = models.CharField(max_length=10)
+    image = models.ImageField(upload_to="supplier/image", default="image/default.png")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name

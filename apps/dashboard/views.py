@@ -16,11 +16,20 @@ def dashboard(request):
     supplier = Supplier.objects.all().count()
     sale = Sale.objects.all().count()
 
+    product_all = Product.objects.all()
+    sale_all = Sale.objects.all()
+
+    # ProductMasuk
+
+    # ProductKeluar
+
     context = {
         "customer": customer,
         "product": product,
         "supplier": supplier,
         "sale": sale,
+        "product_all": product_all,
+        "sale_all": sale_all,
     }
 
     return render(request, "index.html", context)

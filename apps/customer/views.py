@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Customer
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
+from django.contrib import messages
 from django.http import HttpResponse
 
 # Create your views here.
@@ -27,6 +28,8 @@ def customerCreate(request):
 
         Customer.objects.create(name=name, alamat=alamat, email=email, telepon=telepon)
 
+        messages.success(request, "Berhasil membuat customer")
+
         return redirect("customer")
     else:
         return render(request, "customer/create.html")
@@ -49,6 +52,8 @@ def customerUpdate(request, id):
 
         customer.save()
 
+        messages.success(request, "Berhasil membuat customer")
+
         return redirect("customer")
     else:
         return render(request, "customer/update.html", context)
@@ -60,7 +65,10 @@ def customerDelete(request, id):
 
     try:
         customer.delete()
+        messages.success(request, "Berhasil mendelete customer")
 
         return redirect("customer")
     except Customer.DoesNotExist:
-        raise Exception("Ga bisa")
+        messages.error(request, "Error Pada delete customer")
+
+        return redirect("customer")
