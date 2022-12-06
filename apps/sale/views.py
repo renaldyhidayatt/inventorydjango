@@ -3,6 +3,10 @@ from .models import Sale
 from apps.product.models import Product
 from apps.customer.models import Customer
 from django.contrib import messages
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
 from django.contrib.auth.decorators import login_required
 
 
@@ -115,4 +119,33 @@ def saleDelete(request, id):
 
         return redirect("sale")
     except Sale.DoesNotExist:
-        raise Exception("Errooror")
+        messages.error(request, "failed delete sale")
+
+        return redirect("sale")
+
+
+@login_required(login_url="/auth/login")
+def saleGeneratePdf(request, id):
+    sale = Sale.objects.get(id=id)
+
+    try:
+        template_path = "sale/generatePdf.html"
+        context = {"sale": sale}
+        response = HttpResponse(content_type="application/pdf")
+
+        response["Content-Disposition"] = 'filename="report.pdf"'
+
+        template = get_template(template_path)
+        html = template.render(context)
+
+        pdf = pisa.CreatePDF(html, dest=response)
+
+        if pdf.err:
+            return HttpResponse("We had some errors <pre>" + html + "</pre>")
+
+        return response
+
+    except Sale.DoesNotExist:
+        messages.error(request, "failed get id sale")
+
+        return redirect("sale")

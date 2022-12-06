@@ -1,0 +1,63 @@
+<html>
+
+<head>
+    <title>Generate pdf</title>
+    <style>
+        body {
+            width: 90%;
+            margin: auto;
+        }
+
+        table {
+            border: 1px solid #ddd;
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        td,
+        th {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+
+        table th {
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h3 class="text-center">
+        Generate pdf sale
+    </h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total harga</th>
+                <th>Tanggal Transaksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{sale.customer.name}}</td>
+                <td>{{sale.product.name}}</td>
+                <td>{{sale.qty}}</td>
+                <td>{{sale.total_price}}</td>
+                <td>{{sale.date_transaksi}}</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
