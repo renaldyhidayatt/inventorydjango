@@ -27,6 +27,7 @@
             <th>Alamat</th>
             <th>Email</th>
             <th>Telepon</th>
+            <th>Image</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -37,6 +38,9 @@
             <td>{{i.alamat}}</td>
             <td>{{i.email}}</td>
             <td>{{i.telepon}}</td>
+            <td width="250">
+              <img class="rounded-circle" width="15%" src="{{i.image.url}}" />
+            </td>
             <td>
               <a
                 href="{% url 'supplierupdate' i.id %}"

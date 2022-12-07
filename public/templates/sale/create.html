@@ -13,39 +13,19 @@
       {% csrf_token %}
       <div class="form-group">
         <label for="Customer">Customer</label>
-        <select name="customer" class="form-control">
-          <option value="===">Kosong</option>
-          {% for c in customer %}
-          <option value="{{c.id}}">{{c.name}}</option>
-          {% endfor %}
-        </select>
+        {{form.customer}}
       </div>
       <div class="form-group">
         <label for="Product">Product</label>
-        <select name="product" class="form-control">
-          <option value="===">Kosong</option>
-          {% for c in product %}
-          <option value="{{c.id}}">{{c.name}}</option>
-          {% endfor %}
-        </select>
+        {{form.product}}
       </div>
       <div class="form-group">
         <label for="Qty">Quantity</label>
-        <input
-          type="number"
-          id="Qty"
-          class="form-control form-control-sm mb-2 mr-sm-2"
-          name="qty"
-        />
+        {{form.qty}}
       </div>
       <div class="form-group">
         <label for="date_transaksi">Tanggal Transaksi</label>
-        <input
-          type="date"
-          class="form-control form-control-sm mb-2 mr-sm-2"
-          name="date_transaksi"
-          id="date_transaksi"
-        />
+        {{form.date_transaksi}}
       </div>
       <button class="btn btn-primary btn-md">Submit</button>
     </form>

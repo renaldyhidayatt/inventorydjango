@@ -1,5 +1,4 @@
-{% extends 'layouts/base.html' %} 
-{% block content %}
+{% extends 'layouts/base.html' %} {% block content %}
 <h1 class="h3 mb-2 text-gray-800">Table Category</h1>
 <p class="mb-4">
   DataTables is a third party plugin that is used to generate the demo table
@@ -13,23 +12,48 @@
     <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
   </div>
   <div class="card-body">
-    <form action="{% url 'supplierupdate' supplier.id %}" method="post" enctype="multipart/form-data">
+    <form
+      action="{% url 'supplierupdate' supplier.id %}"
+      method="post"
+      enctype="multipart/form-data"
+    >
       {% csrf_token %}
-      <div class="form-group" >
+      <div class="form-group">
         <label for="Name">Name</label>
-        <input class="form-control form-control-sm mb-2 mr-sm-2" name="name" value="{{supplier.name}}" />
+        {{form.name}}
+        <div class="valid-feedback">{{form.name.errors}}</div>
       </div>
-      <div class="form-group" >
+      <div class="form-group">
         <label for="Alamat">Alamat</label>
-        <input class="form-control form-control-sm mb-2 mr-sm-2" name="alamat" value="{{supplier.alamat}}" />
+        {{form.alamat}}
+        <div class="valid-feedback">{{form.alamat.errors}}</div>
       </div>
-      <div class="form-group" >
+      <div class="form-group">
         <label for="Email">Email</label>
-        <input class="form-control form-control-sm mb-2 mr-sm-2" name="email" value="{{supplier.email}}" />
+        {{form.email}}
+        <div class="valid-feedback">{{form.alamat.errors}}</div>
       </div>
-      <div class="form-group" >
+      <div class="form-group">
         <label for="Telepon">Telepon</label>
-        <input class="form-control form-control-sm mb-2 mr-sm-2" name="telepon" value="{{supplier.telepon}}" />
+        {{form.telepon}}
+        <div class="valid-feedback">{{form.telepon.errors}}</div>
+      </div>
+      <div class="input-group mb-3">
+        <div class="custom-file">
+          {{form.image}}
+          <label
+            class="custom-file-label"
+            for="inputGroupFile02"
+            aria-describedby="inputGroupFileAddon02"
+            >Choose file</label
+          >
+        </div>
+        <div class="input-group-append">
+          <span class="input-group-text" id="inputGroupFileAddon02"
+            >Upload Image</span
+          >
+        </div>
+        <div class="valid-feedback">{{form.image.errors}}</div>
       </div>
       <button class="btn btn-primary btn-md">Submit</button>
     </form>

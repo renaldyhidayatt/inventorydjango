@@ -1,66 +1,91 @@
+from typing import Optional, Any
 from django.shortcuts import render, redirect
 from .models import Category
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import csv
+from django.views.generic import View, ListView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-
+from .forms import CategoryForm
 
 # Create your views here.
 
 
-@login_required(login_url="/auth/login")
-def Categorylist(request):
-    categories = Category.objects.all()
-
-    context = {"categories": categories}
-
-    return render(request, "category/index.html", context)
+class CategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+    template_name: str = "category/index.html"
+    context_object_name: Optional[str] = "categories"
+    redirect_field_name = "/auth/login"
 
 
-@login_required(login_url="/auth/login")
-def createCategory(request):
-    if request.method == "POST":
-        name = request.POST["name"]
+class CategoryCreateView(LoginRequiredMixin, View):
+    redirect_field_name: Any = "/auth/login"
 
-        Category.objects.create(name=name)
-        messages.success(request, "Berhasil membuat category")
+    def get(self, request):
+        form = CategoryForm()
 
-        return redirect("category")
-    else:
-        return render(request, "category/create.html")
+        context = {"form": form}
+        return render(request, "category/create.html", context)
+
+    def post(self, request):
+        form = CategoryForm(request.POST)
+
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+
+            Category.objects.create(name=name)
+
+            messages.success(request, "Berhasil membuat Category")
+
+            return redirect("category")
+        else:
+            messages.error(request, "Error input category")
+            return redirect("category")
 
 
-@login_required(login_url="/auth/login")
-def updateCategory(request, id):
-    category = Category.objects.get(id=id)
-    context = {"category": category}
-    if request.method == "POST":
-        name = request.POST["name"]
+class CategoryUpdateView(LoginRequiredMixin, View):
+    redirect_field_name: Any = "/auth/login"
 
-        category.name = name
+    def get(self, request, id):
+        category = Category.objects.get(id=id)
+        form = CategoryForm(instance=category)
 
-        category.save()
+        context = {"form": form, "category": category}
 
-        messages.success(request, "Berhasil mengupdate category")
-
-        return redirect("category")
-    else:
         return render(request, "category/update.html", context)
 
+    def post(self, request, id):
+        form = CategoryForm()
+        category = Category.objects.get(id=id)
 
-@login_required(login_url="/auth/login")
-def deleteCategory(request, id):
-    category = Category.objects.get(id=id)
+        if form.is_valid():
+            name = form.cleaned_data["name"]
 
-    try:
-        category.delete()
-        messages.success(request, "Berhasil mendelete category")
+            category.name = name
 
-        return redirect("category")
-    except Category.DoesNotExist:
-        messages.error(request, "Error delete category")
-        raise Exception("Category id not found")
+            category.save()
+
+            messages.success(request, "Berhasil mengupdate category")
+
+            return redirect("category")
+        else:
+            messages.error(request, "Error input category")
+            return redirect("category")
+
+
+class CategoryDeleteView(LoginRequiredMixin, View):
+    def get(request, id):
+        category = Category.objects.get(id=id)
+
+        try:
+            category.delete()
+            messages.success(request, "Berhasil mendelete category")
+
+            return redirect("category")
+        except Category.DoesNotExist:
+            messages.error(request, "Error delete category")
+            return redirect("category")
 
 
 @login_required(login_url="/auth/login")

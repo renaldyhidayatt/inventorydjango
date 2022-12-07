@@ -12,16 +12,14 @@
     <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
   </div>
   <div class="card-body">
-      <form action="{% url 'createcategory' %}" method="post">
-        {% csrf_token %}  
-        <div>
-              <label for="Name">Name</label>
-              <input class="form-control form-control-sm mb-2 mr-sm-2" name="name" />
-          </div>
-          <button class="btn btn-primary btn-md">
-              Submit
-          </button>
-      </form>
+    <form action="{% url 'createcategory' %}" method="post">
+      {% csrf_token %}
+      <div>
+        <label for="Name">Name</label>
+        {{form.name}}
+      </div>
+      <button class="btn btn-primary btn-md">Submit</button>
+    </form>
   </div>
 </div>
 

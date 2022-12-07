@@ -1,96 +1,96 @@
+from typing import Optional, Any
 from django.shortcuts import render, redirect
 from .models import Product
+from django.views.generic import View, ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from apps.category.models import Category
 from apps.supplier.models import Supplier
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from .forms import ProductForm
 
 
 # Create your views here.
-@login_required(login_url="/auth/login")
-def productList(request):
-    product = Product.objects.all()
-
-    context = {"product": product}
-
-    return render(request, "product/index.html", context)
+class ProductListView(LoginRequiredMixin, ListView):
+    model = Product
+    template_name: str = "product/index.html"
+    context_object_name: Optional[str] = "product"
+    redirect_field_name: Any = "/auth/login"
 
 
-@login_required(login_url="/auth/login")
-def productCreate(request):
-    category = Category.objects.all()
-    supplier = Supplier.objects.all()
-    context = {"category": category, "supplier": supplier}
-    if request.method == "POST":
-        name = request.POST["name"]
-        harga = request.POST["harga"]
-        image = request.FILES.get("image")
-        qty = request.POST.get("qty")
-        category = request.POST["category"]
-        supplier = request.POST["supplier"]
+class ProductCreateView(LoginRequiredMixin, View):
+    redirect_field_name: Any = "/auth/login"
 
-        category_id = Category.objects.get(id=category)
-        supplier_id = Supplier.objects.get(id=supplier)
+    def get(self, request):
+        form = ProductForm()
+        context = {"form": form}
 
-        if not category_id:
-            messages.info(request, "required category id")
-            return redirect("product")
-
-        if not supplier_id:
-            messages.info(request, "required supplier id")
-            return redirect("product")
-
-        Product.objects.create(
-            name=name,
-            harga=harga,
-            image=image,
-            qty=int(qty),
-            category=category_id,
-            supplier=supplier_id,
-        )
-        messages.success(request, "berhasil membuat product")
-
-        return redirect("product")
-    else:
         return render(request, "product/create.html", context)
 
+    def post(self, request):
+        form = ProductForm(request.POST, request.FILES or None)
 
-@login_required(login_url="/auth/login")
-def productUpdate(request, id):
-    product = Product.objects.get(id=id)
-    category = Category.objects.all()
-    supplier = Supplier.objects.all()
-    context = {"product": product, "category": category, "supplier": supplier}
-    if request.method == "POST":
-        name = request.POST["name"]
-        harga = request.POST["harga"]
-        qty = request.POST.get("qty")
-        category = request.POST["category"]
-        supplier = request.POST["supplier"]
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            harga = form.cleaned_data["harga"]
+            image = form.cleaned_data["image"]
+            qty = form.cleaned_data["qty"]
+            category = form.cleaned_data["category"]
+            supplier = form.cleaned_data["supplier"]
 
-        category_id = Category.objects.get(id=category)
-        supplier_id = Supplier.objects.get(id=supplier)
+            Product.objects.create(
+                name=name,
+                harga=harga,
+                image=image,
+                qty=int(qty),
+                category=category,
+                supplier=supplier,
+            )
+            messages.success(request, "Success create products")
 
-        if not category_id:
-            messages.info(request, "required category id")
+            return redirect("product")
+        else:
+            messages.error(request, "Error field products")
             return redirect("product")
 
-        if not supplier_id:
-            messages.info(request, "required supplier id")
-            return redirect("product")
 
-        product.name = name
-        product.harga = harga
-        product.qty = int(qty)
-        product.category = category_id
+class ProductUpdateView(LoginRequiredMixin, View):
+    redirect_field_name: Any = "/auth/login"
 
-        product.save()
+    def get(self, request, id):
+        product = Product.objects.get(id=id)
+        form = ProductForm(instance=product)
 
-        messages.success(request, "berhasil update product")
-
-        return redirect("product")
-    else:
+        context = {"form": form, "product": product}
         return render(request, "product/update.html", context)
+
+    def post(self, request, id):
+        product = Product.objects.get(id=id)
+
+        form = ProductForm(request.POST, request.FILES or None)
+
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            harga = form.cleaned_data["harga"]
+            image = form.cleaned_data["image"]
+            qty = form.cleaned_data["qty"]
+            category = form.cleaned_data["category"]
+            supplier = form.cleaned_data["supplier"]
+
+            product.name = name
+            product.harga = harga
+            product.image = image
+            product.qty = qty
+            product.category = category
+            product.supplier = supplier
+
+            messages.success(request, "berhasil update product")
+
+            return redirect("product")
+        else:
+
+            messages.error(request, "Error pada input product")
+            return redirect("product")
 
 
 @login_required(login_url="/auth/login")

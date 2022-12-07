@@ -20,48 +20,40 @@
       {% csrf_token %}
       <div class="form-group">
         <label for="Name">Name</label>
-        <input
-          class="form-control form-control-sm mb-2 mr-sm-2"
-          value="{{product.name}}"
-          name="name"
-        />
+        {{form.name}}
       </div>
       <div class="form-group">
         <label for="Harga">Harga</label>
-        <input
-          type="text"
-          class="form-control form-control-sm mb-2 mr-sm-2"
-          value="{{product.harga}}"
-          name="harga"
-        />
+        {{form.harga}}
       </div>
 
       <div class="form-group">
         <label for="Quantity">Quantity</label>
-        <input
-          type="text"
-          class="form-control form-control-sm mb-2 mr-sm-2"
-          value="{{product.qty}}"
-          name="qty"
-        />
+        {{form.qty}}
+      </div>
+      <div class="input-group mb-3">
+        <div class="custom-file">
+          {{form.image}}
+          <label
+            class="custom-file-label"
+            for="inputGroupFile02"
+            aria-describedby="inputGroupFileAddon02"
+            >Choose file</label
+          >
+        </div>
+        <div class="input-group-append">
+          <span class="input-group-text" id="inputGroupFileAddon02"
+            >Upload Image</span
+          >
+        </div>
       </div>
       <div class="form-group">
         <label for="Category">Category</label>
-        <select name="category" class="form-control">
-          <option value="===">Kosong</option>
-          {% for c in category %}
-          <option value="{{c.id}}">{{c.name}}</option>
-          {% endfor %}
-        </select>
+        {{form.category}}
       </div>
       <div class="form-group">
         <label for="Supplier">Supplier</label>
-        <select name="supplier" class="form-control">
-          <option value="===">Kosong</option>
-          {% for s in supplier %}
-          <option value="{{s.id}}">{{s.name}}</option>
-          {% endfor %}
-        </select>
+        {{form.supplier}}
       </div>
       <button class="btn btn-primary btn-md">Submit</button>
     </form>

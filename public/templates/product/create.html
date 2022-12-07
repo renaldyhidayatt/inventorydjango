@@ -20,24 +20,15 @@
       {% csrf_token %}
       <div class="form-group">
         <label for="Name">Name</label>
-        <input class="form-control form-control-sm mb-2 mr-sm-2" name="name" />
+        {{form.name}}
       </div>
       <div class="form-group">
         <label for="Harga">Harga</label>
-        <input
-          type="text"
-          class="form-control form-control-sm mb-2 mr-sm-2"
-          name="harga"
-        />
+        {{form.harga}}
       </div>
       <div class="input-group mb-3">
         <div class="custom-file">
-          <input
-            type="file"
-            name="image"
-            class="custom-file-input"
-            id="inputGroupFile02"
-          />
+          {{form.image}}
           <label
             class="custom-file-label"
             for="inputGroupFile02"
@@ -53,29 +44,15 @@
       </div>
       <div class="form-group">
         <label for="Quantity">Quantity</label>
-        <input
-          type="text"
-          class="form-control form-control-sm mb-2 mr-sm-2"
-          name="qty"
-        />
+        {{form.qty}}
       </div>
       <div class="form-group">
         <label for="Category">Category</label>
-        <select name="category" class="form-control">
-          <option value="===">Kosong</option>
-          {% for c in category %}
-          <option value="{{c.id}}">{{c.name}}</option>
-          {% endfor %}
-        </select>
+        {{form.category}}
       </div>
       <div class="form-group">
         <label for="Supplier">Supplier</label>
-        <select name="supplier" class="form-control">
-          <option value="===">Kosong</option>
-          {% for s in supplier %}
-          <option value="{{s.id}}">{{s.name}}</option>
-          {% endfor %}
-        </select>
+        {{form.supplier}}
       </div>
       <button class="btn btn-primary btn-md">Submit</button>
     </form>

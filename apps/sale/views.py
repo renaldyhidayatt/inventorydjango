@@ -1,3 +1,4 @@
+from typing import Optional, Any
 from django.shortcuts import render, redirect
 from .models import Sale
 from apps.product.models import Product
@@ -5,108 +6,113 @@ from apps.customer.models import Customer
 from django.contrib import messages
 from django.http import HttpResponse
 from django.template.loader import get_template
+from django.views.generic import View, ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from xhtml2pdf import pisa
-
+from .forms import SaleForm
 from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
-@login_required(login_url="/auth/login")
-def saleList(request):
-    sale = Sale.objects.all()
-
-    context = {"sale": sale}
-
-    return render(request, "sale/index.html", context)
+class SaleListView(LoginRequiredMixin, ListView):
+    model = Sale
+    template_name: str = "sale/index.html"
+    context_object_name: Optional[str] = "sale"
+    redirect_field_name: Any = "/auth/login"
 
 
-@login_required(login_url="/auth/login")
-def saleCreate(request):
-    product = Product.objects.all()
-    customer = Customer.objects.all()
+class SaleCreateView(LoginRequiredMixin, View):
+    redirect_field_name: Any = "/auth/login"
 
-    context = {"product": product, "customer": customer}
-    if request.method == "POST":
-        product_id = request.POST["product"]
-        customer_id = request.POST["customer"]
-        qty = request.POST["qty"]
-        date_transaksi = request.POST["date_transaksi"]
+    def get(self, request):
+        form = SaleForm()
 
-        product = Product.objects.get(id=product_id)
-        customer = Customer.objects.get(id=customer_id)
+        context = {"form": form}
 
-        if not product:
-            messages.error(request, "required product ")
+        return render(request, "sale/create.html", context)
+
+    def post(self, request):
+        form = SaleForm(request.POST, request.FILES or None)
+
+        if form.is_valid():
+            product = form.cleaned_data["product"]
+            customer = form.cleaned_data["customer"]
+            qty = form.cleaned_data["qty"]
+            date_transaksi = form.cleaned_data["date_transaksi"]
+
+            product_id = Product.objects.get(name=product)
+
+            if not product_id:
+                messages.error(request, "required product")
+                return redirect("sale")
+
+            quantityproduct = int(product_id.qty) - int(qty)
+            product_id.qty = quantityproduct
+
+            harga = int(qty) * int(product_id.harga)
+
+            product_id.save()
+
+            Sale.objects.create(
+                customer=customer,
+                product=product_id,
+                qty=int(qty),
+                total_price=harga,
+                date_transaksi=date_transaksi,
+            )
+            messages.success(request, "Berhasil membuat sale")
+            return redirect("sale")
+        else:
+            messages.error(request, "Error input Sale")
             return redirect("sale")
 
-        if not customer:
-            messages.error(request, "required customer")
-            return redirect("sale")
 
-        quantityproduct = int(product.qty) - int(qty)
-        product.qty = quantityproduct
+class SaleUpdateView(LoginRequiredMixin, View):
+    redirect_field_name: Any = "/auth/login"
 
-        harga = int(qty) * int(product.harga)
+    def get(self, request, id):
+        sale = Sale.objects.get(id=id)
+        form = SaleForm(instance=sale)
 
-        product.save()
+        context = {"form": form, "sale": sale}
 
-        Sale.objects.create(
-            customer=customer,
-            product=product,
-            qty=int(qty),
-            total_price=harga,
-            date_transaksi=date_transaksi,
-        )
-        messages.success(request, "Berhasil membuat sale")
-        return redirect("sale")
-
-    else:
-        return render(request, "sale/create.html", context=context)
-
-
-@login_required(login_url="/auth/login")
-def saleUpdate(request, id):
-    sale = Sale.objects.get(id=id)
-    product = Product.objects.all()
-    customer = Customer.objects.all()
-    context = {"sale": sale, "product": product, "customer": customer}
-    if request.method == "POST":
-        product_id = request.POST["product"]
-        customer_id = request.POST["customer"]
-        qty = request.POST["qty"]
-        date_transaksi = request.POST["date_transaksi"]
-
-        product = Product.objects.get(id=product_id)
-        customer = Customer.objects.get(id=customer_id)
-
-        if not product:
-            messages.error(request, "undefined id product ")
-            return redirect("sale")
-
-        if not customer:
-            messages.error(request, "undefined id customer")
-            return redirect("sale")
-
-        quantityproduct = int(product.qty) - int(qty)
-        product.qty = quantityproduct
-
-        harga = int(qty) * int(product.harga)
-
-        product.save()
-
-        sale.customer = customer
-        sale.product = product
-        sale.qty = qty
-        sale.date_transaksi = date_transaksi
-        sale.total_price = harga
-
-        sale.save()
-        messages.success(request, "berhasil update sale")
-
-        return redirect("sale")
-
-    else:
         return render(request, "sale/update.html", context)
+
+    def post(self, request, id):
+        sale = Sale.object.get(id=id)
+        form = SaleForm(request.POST, request.FILES or None)
+        if form.is_valid():
+            product = form.cleaned_data["product"]
+            customer = form.cleaned_data["customer"]
+            qty = form.cleaned_data["qty"]
+            date_transaksi = form.cleaned_data["date_transaksi"]
+
+            product_id = Product.objects.get(name=product)
+
+            if not product_id:
+                messages.error(request, "required product")
+                return redirect("sale")
+
+            quantityproduct = int(product_id.qty) - int(qty)
+            product_id.qty = quantityproduct
+
+            harga = int(qty) * int(product_id.harga)
+
+            product_id.save()
+
+            sale.customer = customer
+            sale.product = product_id
+            sale.qty = qty
+            sale.date_transaksi = date_transaksi
+            sale.total_price = harga
+            sale.save()
+
+            messages.success(request, "berhasil update sale")
+
+            return redirect("sale")
+        else:
+            messages.error(request, "Error pada input sale")
+            return redirect("sale")
 
 
 @login_required(login_url="/auth/login")
