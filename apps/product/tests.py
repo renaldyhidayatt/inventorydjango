@@ -1,27 +1,29 @@
 from django.test import TestCase
-from .models import Product
-from .models import Category
+from .models import Product, Category, Supplier
 
 # Create your tests here.
 
 
 class ProductTestCase(TestCase):
     def setUp(self):
-        cat = Category.objects.create(name="test")
-        prod = Product.objects.create(
-            name="test", harga="1000", qty="test", category=cat
+        self.category = Category.objects.create(name="test")
+        self.supplier = Supplier.objects.create(
+            name="John Doe",
+            alamat="JakartaString",
+            email="jakartastring@admin.com",
+            telepon="082818331312",
+            image="url.png",
         )
-        self.cat = cat
-        self.prod = prod
+        self.product = Product.objects.create(
+            name="My Product",
+            harga="500",
+            image="url.png",
+            qty=2,
+            category=self.category,
+            supplier=self.supplier,
+        )
 
-    def test_product_name(self):
-        self.assertEqual(self.prod.name, "test")
-
-    def test_product_harga(self):
-        self.assertEqual(self.prod.harga, "1000")
-
-    def test_product_qty(self):
-        self.assertEqual(self.prod.qty, "test")
-
-    def test_product_category(self):
-        self.assertEqual(self.prod.category, self.cat)
+    def test_creation_product(self):
+        self.assertEqual(self.product.name, "My Product")
+        self.assertEqual(self.product.harga, "500")
+        self.assertEqual(self.product.qty, 2)
